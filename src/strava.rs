@@ -21,8 +21,9 @@ pub struct Activity {
     pub elapsed_time: f32,
     #[serde(rename(deserialize = "type"))]
     pub activity_type: String,
-    pub average_heartrate: f32,
-    pub max_heartrate: f32,
+    pub average_heartrate: Option<f32>,
+    pub max_heartrate: Option<f32>,
+    pub has_heartrate: bool,
     pub average_speed: f32,
     pub max_speed: f32,
     pub moving_time: f32,
@@ -45,6 +46,7 @@ impl AuthData {
             ],
         )?;
         let resp = client.post(url).send()?;
+        dbg!(resp.status());
         ensure!(
             resp.status() == StatusCode::OK,
             "Response didn't have a status code of 200"
@@ -90,6 +92,7 @@ impl Activity {
             .get(format!("{}/api/v3/athlete/activities", STRAVA_URL))
             .bearer_auth(&auth_data.access_token)
             .send()?;
+        dbg!(resp.status());
         ensure!(
             resp.status() == StatusCode::OK,
             "Response didn't have status code of 200"

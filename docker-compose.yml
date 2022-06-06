@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  strava_scraper:
+    build:
+      context: .
+      dockerfile: docker/dev.Dockerfile
+    volumes:
+      - '.:/usr/src/app'
+    env_file: .env
