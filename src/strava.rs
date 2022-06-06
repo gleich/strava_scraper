@@ -18,7 +18,7 @@ pub struct AuthData {
 
 #[derive(Debug, Deserialize)]
 pub struct Activity {
-    pub elapsed_time: f32,
+    pub moving_time: f32,
     #[serde(rename(deserialize = "type"))]
     pub activity_type: String,
     pub average_heartrate: Option<f32>,
@@ -26,9 +26,11 @@ pub struct Activity {
     pub has_heartrate: bool,
     pub average_speed: f32,
     pub max_speed: f32,
-    pub moving_time: f32,
     pub name: String,
     pub pr_count: f32,
+    pub start_date: DateTime<Utc>,
+    pub average_watts: f32,
+    pub distance: f32,
 }
 
 impl AuthData {
@@ -46,7 +48,6 @@ impl AuthData {
             ],
         )?;
         let resp = client.post(url).send()?;
-        dbg!(resp.status());
         ensure!(
             resp.status() == StatusCode::OK,
             "Response didn't have a status code of 200"
